@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Friend Tech Accounts</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    
+
+</head>
+<body>
+
+    <div class="navbar">
+        <img src="Friendtech.jpg" alt="Logo" style="width: 60px; height: 60px; border-radius: 20px; margin-left: 20px;">
+        <div style="display: flex; align-items: center;">
+            <div class="nav-links">
+                <a href="#">Main</a>
+                <a href="#">Portfolio</a>
+            </div>
+            <button class="wallet-button" onclick="togglePopup()">Wallet</button>
+        </div>
+    </div>
+
+<h1 class="title">New Users</h1>
+
+<div class="popup-container" id="popupContainer">
+    <div class="popup-content">
+        <input type="password" id="privateKeyInput" placeholder="Enter Private Key">
+        <button onclick="setPrivateKey()">Set Private Key</button>
+        <p>Your Private Key:</p>
+        <span id="privateKeyDisplay">Censored</span> <!-- Display "Censored" by default -->
+        <button onclick="togglePrivateKey()">Show Private Key</button>
+    </div>
+</div>
+
+
+<div class="container" id="userContainer">
+    <!-- Cards will be inserted here -->
+</div>
+
+<div class="find-user-container">
+    <h1>Find User</h1>
+    <div>
+        <input type="text" id="findUserAddress" placeholder="Enter Wallet Address">
+        <button class="find-user-button" onclick="findUser()">Find User</button>
+    </div>
+    <div class="user-info" id="userInfo">
+        <!-- User information will be displayed here -->
+    </div>
+</div>
+
+<!-- New container for Buy and Sell Shares (centered) -->
+<div class="buy-sell-container">
+    <h1>Buy and Sell Shares</h1>
+    <div>
+        <input type="text" id="address" placeholder="Wallet Address">
+        <input type="number" id="shares" placeholder="Number of Shares">
+        <button class="buy-button" onclick="buyShares()">Buy</button>
+        <button class="sell-button" onclick="sellShares()">Sell</button>
+        <p id="transactionStatus"></p> <!-- Popup status message -->
+    
+
+
+    </div>
+</div>
+<script>
+
+let userPrivateKey = ''; // Initialize an empty string to store the user's private key
+
+// Function to toggle the popup
+function togglePopup() {
+    const popupContainer = document.getElementById('popupContainer');
+    popupContainer.style.display = popupContainer.style.display === 'block' ? 'none' : 'block';
+}
+
+// Function to set the private key and close the popup
+function setPrivateKey() {
+    userPrivateKey = document.getElementById('privateKeyInput').value;
+    alert('Private key set successfully.');
+    console.log("Private key set to:", userPrivateKey); // Log the private key after setting it
+    togglePopup(); // Close the popup
+}
+
+
+// Function to toggle the private key display
+function togglePrivateKey() {
+    const privateKeyDisplay = document.getElementById('privateKeyDisplay');
+    const privateKeyInput = document.getElementById('privateKeyInput');
+
+    if (privateKeyDisplay.textContent === 'Censored') {
+        // If it's censored, show the private key
+        privateKeyDisplay.textContent = userPrivateKey;
+        privateKeyInput.style.display = 'none'; // Hide the input field
+    } else {
+        // If it's showing, censor it again
+        privateKeyDisplay.textContent = 'Censored';
+        privateKeyInput.style.display = 'block'; // Show the input field
+    }
+}
+
+
+function savePrivateKey() {
+            const privateKeyInput = document.getElementById('privateKeyInput').value;
+            localStorage.setItem('userPrivateKey', privateKeyInput);
+        }
+
+        // Function to load the private key from local storage
+        function loadPrivateKey() {
+            const storedPrivateKey = localStorage.getItem('userPrivateKey');
+            if (storedPrivateKey) {
+                userPrivateKey = storedPrivateKey;
+                console.log("Private key loaded from local storage:", userPrivateKey);
+            }
+        }
+
+        // Call the loadPrivateKey function when the page loads
+        window.addEventListener('load', loadPrivateKey);
+
+    const uniqueAddresses = new Set(); // To keep track of unique addresses
+
+    async function findUser() {
+    const addressInput = document.getElementById('findUserAddress').value;
+
+    try {
+        const response = await fetch(`https://prod-api.kosetto.com/users/${addressInput}`);
+        const userData = await response.json();
+
+        // Create a container for displaying user information
+        const userInfoContainer = document.getElementById('userInfo');
+        userInfoContainer.innerHTML = ''; // Clear existing user information
+
+        if (userData) {
+            const userCard = createUserCard(userData);
+            userInfoContainer.appendChild(userCard);
+        } else {
+            userInfoContainer.textContent = 'User not found';
+        }
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+    }
+}
+
+function createUserCard(userData) {
+    const card = document.createElement('div');
+    card.className = 'user-card';
+
+    // Create a header section for the username
+    const header = document.createElement('div');
+    header.className = 'user-card-header';
+
+    const username = document.createElement('div');
+    username.className = 'username';
+    username.textContent = userData.twitterUsername;
+
+    const twitterLink = document.createElement('a');
+    twitterLink.className = 'twitter-link';
+    twitterLink.href = `https://twitter.com/${userData.twitterUsername}`;
+    twitterLink.target = '_blank';
+
+    const twitterIcon = document.createElement('img');
+    twitterIcon.src = 'twitterr.png'; // Replace with the correct path to your Twitter icon
+    twitterIcon.className = 'twitter-icon';
+
+    twitterLink.appendChild(twitterIcon);
+    header.appendChild(username);
+    header.appendChild(twitterLink);
+
+    // Create a section for user details
+    const userDetails = document.createElement('div');
+    userDetails.className = 'user-details';
+    
+
+    const walletAddress = document.createElement('p');
+    walletAddress.className = 'user-detail';
+    const shortenedAddress = userData.address.slice(0, 6) + '...' + userData.address.slice(-4);
+walletAddress.innerHTML = `<span>Wallet Address:</span> <a href="https://basescan.org/address/${userData.address}" target="_blank">${shortenedAddress}</a>`;
+
+    const holderCount = document.createElement('p');
+    holderCount.className = 'user-detail';
+    holderCount.innerHTML = `<span>Holder Count:</span> ${userData.holderCount}`;
+
+    const holdingCount = document.createElement('p');
+    holdingCount.className = 'user-detail';
+    holdingCount.innerHTML = `<span>Holding Count:</span> ${userData.holdingCount}`;
+
+    const shareSupply = document.createElement('p');
+    shareSupply.className = 'user-detail';
+    shareSupply.innerHTML = `<span>Share Supply:</span> ${userData.shareSupply} `;
+
+    const displayPrice = document.createElement('p');
+    displayPrice.className = 'user-detail';
+    displayPrice.innerHTML = `<span>Display Price:</span> ${userData.displayPrice / 1e18} ETH`;
+
+    userDetails.appendChild(walletAddress);
+    userDetails.appendChild(holderCount);
+    userDetails.appendChild(holdingCount);
+    userDetails.appendChild(shareSupply);
+    userDetails.appendChild(displayPrice);
+
+    card.appendChild(header);
+    card.appendChild(userDetails);
+
+    return card;
+}
+
+ 
+
+
+    function createCard(transaction, twitterData) {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const profileSection = document.createElement('div');
+        profileSection.className = 'profile-section';
+
+        const img = document.createElement('img');
+        img.src = twitterData.twitterPfpUrl;
+        img.className = 'profile-picture';
+        profileSection.appendChild(img);
+
+        const usernameLink = document.createElement('a'); // Create an anchor element
+        usernameLink.href = `https://www.friend.tech/rooms/${transaction.from}`; // Set the link URL
+        usernameLink.target = '_blank'; // Open link in a new tab
+        usernameLink.className = 'username';
+        usernameLink.textContent = twitterData.twitterUsername; // Set the username text
+        profileSection.appendChild(usernameLink); // Append the anchor element
+
+        card.appendChild(profileSection);
+
+        const walletInfo = document.createElement('div');
+        walletInfo.className = 'wallet-info';
+        walletInfo.innerHTML = `
+            <p>Wallet: <a href="https://basescan.org/address/${transaction.from}" target="_blank">${transaction.from.slice(0, 10)}...</a></p>
+            <p class="holder-count" style="font-size: 18px;">Holder count: ${twitterData.holderCount}</p> <!-- Updated font size -->
+            <!-- Timestamp element -->
+            <p class="timestamp">${formatTimestamp(transaction.timeStamp)}</p>
+        `;
+
+        card.appendChild(walletInfo);
+
+        const buyButton = document.createElement('button');
+  buyButton.className = 'buy-button';
+  buyButton.textContent = 'Buy';
+  buyButton.onclick = () => {
+    console.log("Buy button clicked for address:", transaction.from);
+    buyNewCardShares(transaction.from); // Call the new function for buying shares
+  };
+  walletInfo.appendChild(buyButton);
+
+        // Add a link to the Twitter profile
+        const twitterLink = document.createElement('a');
+        twitterLink.className = 'twitter-link';
+        twitterLink.href = `https://twitter.com/${twitterData.twitterUsername}`;
+        twitterLink.target = '_blank';
+        walletInfo.appendChild(twitterLink);
+
+        // Add Twitter icon inside the link
+        const twitterIcon = document.createElement('img');
+        twitterIcon.src = 'twitterr.png'; // Replace with the correct path to your Twitter icon
+        twitterIcon.className = 'twitter-icon';
+        twitterLink.appendChild(twitterIcon);
+
+        return card;
+    }
+
+    function formatTimestamp(timestamp) {
+        const date = new Date(timestamp * 1000);
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
+        return `${date.getHours()}:${minutes}:${seconds}`;
+    }
+
+
+
+
+async function updateCards() {
+    try {
+        const response = await fetch('filtered_buyShares_transactions.json');
+        const data = await response.json();
+
+        data.sort((a, b) => b.timeStamp - a.timeStamp); // Sort by timestamp in descending order
+
+        const userContainer = document.getElementById('userContainer');
+
+        for (const transaction of data.reverse()) {
+            if (!uniqueAddresses.has(transaction.from)) {
+                uniqueAddresses.add(transaction.from);
+
+                const twitterResponse = await fetch(`https://prod-api.kosetto.com/users/${transaction.from}`);
+                const twitterData = await twitterResponse.json();
+
+                const card = createCard(transaction, twitterData);
+
+                // Insert the new card at the beginning of the container (top of the list)
+                userContainer.insertBefore(card, userContainer.firstChild);
+
+                displayedCards.push(transaction.from);
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+    // Update the cards every 10 seconds
+    setInterval(updateCards, 2000);
+
+    // Update the cards immediately on page load
+    updateCards();
+
+    async function buyShares() {
+  const address = document.getElementById('address').value;
+  const shares = document.getElementById('shares').value;
+
+  try {
+    const response = await axios.post('http://localhost:3000/buyShares', { address, shares, privateKey: userPrivateKey });
+    
+    if (response.data.success) {
+      document.getElementById('transactionStatus').textContent = '✅ Successfully bought shares'; // Show success message
+    } else {
+      alert('Error: ' + response.data.error);
+    }
+  } catch (error) {
+    console.error(error);
+    alert('An error occurred while buying shares');
+  }
+}
+
+
+        async function sellShares() {
+            const address = document.getElementById('address').value;
+            const shares = document.getElementById('shares').value;
+            try {
+                const response = await axios.post('http://localhost:3000/sellShares', { address, shares, privateKey: userPrivateKey });
+                document.getElementById('transactionStatus').textContent = '✅ Successfully sold shares'; // Show success message
+
+            } catch (error) {
+                console.log(error);
+
+            }
+        }
+
+        async function buyNewCardShares(address) {
+       const response = await axios.post('http://localhost:3000/buyNewCardShares',{ address, shares, privateKey: userPrivateKey });
+       if (response.data.success) {
+        document.getElementById('transactionStatus').textContent = '✅ Successfully bought 1 share for the new card'; // Show success message
+    } else {
+      alert('Error: ' + response.data.error);
+    }   
+     
+
+  }
+
+
+        async function fetchSharePrice() {
+            const address = document.getElementById('address').value;
+            const shares = document.getElementById('shares').value || 1;
+            try {
+                const response = await axios.post('http://localhost:3000/getSharePrice', { address, shares });
+                const sharePrice = response.data.price;
+                document.getElementById('sharePrice').textContent = `Share Price: ${sharePrice}`;
+            } catch (error) {
+                document.getElementById('sharePrice').textContent = `Share Price: Error`;
+            }
+        }
+
+</script>
+</body>
+</html>

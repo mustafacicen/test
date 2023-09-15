@@ -1,0 +1,388 @@
+ /* Reset some default styles */
+ body, h1, h2, p {
+    margin: 0;
+    padding: 0;
+}
+
+/* Global styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: white;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    background-color: white;
+    height: 1080px;
+    overflow-y: hidden;
+    padding-top: 60px;
+}
+
+/* Card styles */
+.card {
+    background-color: white;
+    padding: 15px;
+    margin: 15px;
+    width: 300px;
+    border-radius: 20px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    position: relative; /* Added for positioning the timestamp */
+}
+
+.profile-section {
+    display: flex;
+    flex-direction: row; /* Updated to horizontal layout */
+    align-items: center; /* Center vertically */
+    margin-bottom: 15px;
+}
+
+.profile-picture {
+    width: 50px; /* Reduced size */
+    height: 50px; /* Reduced size */
+    border-radius: 50%;
+    margin-right: 10px; /* Added margin for spacing */
+}
+
+.username {
+    font-size: 24px; /* Slightly bigger */
+    font-weight: bold;
+}
+
+.wallet-info {
+    font-size: 18px; /* Slightly bigger */
+    text-align: center;
+}
+
+.wallet-address, .holder-count, .timestamp {
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.timestamp {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #f4f4f4;
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #555;
+    z-index: 1;
+}
+
+.timestamp-text {
+    margin: 0;
+}
+
+.twitter-icon {
+    width: 34px; /* Set the size of the Twitter icon */
+    height: 34px; /* Set the size of the Twitter icon */
+    margin-left: 225px; /* Add margin for spacing */
+    margin-top: -64px;
+}
+
+.title {
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Buy and Sell Container */
+.buy-sell-container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: auto;
+    margin-top: -800px;
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 18px; /* Slightly bigger */
+    cursor: pointer;
+    margin: 10px 0;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    color: #333;
+}
+
+.buy-button, .sell-button {
+    width: 45%;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 18px; /* Slightly bigger */
+    cursor: pointer;
+}
+
+.buy-button {
+    background-color: #4CAF50;
+    color: white;
+    margin-top: 10px;
+    margin-right: 5%;
+}
+
+.sell-button {
+    background-color: #FF0000;
+    color: white;
+}
+
+button:hover, .buy-button:hover, .sell-button:hover {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #333;
+}
+
+/* Updated Navbar styles */
+.navbar {
+    background-color: #00BAFA;
+    color: white;
+    padding: 15px 0;
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.navbar a {
+    text-decoration: none;
+    color: white;
+    margin: 0 20px;
+    font-size: 20px; /* Slightly bigger */
+    transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #4CAF50;
+    transition: color 0.3s ease;
+}
+
+.navbar div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+/* Added a class for the Twitter icon link */
+.twitter-link {
+    text-decoration: none;
+    color: #00BAFA; /* Twitter blue color */
+    display: flex; /* Make the link a flex container */
+    align-items: center; /* Center items vertically */
+}
+
+.twitter-link:hover {
+    color: #0077B5; /* Twitter hover color */
+}
+
+.find-user-container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin-left: 40px; /* Add margin to the left */
+    margin-top: -770px;
+    float: left; /* Add float property to move it to the left */
+    text-align: center;
+}
+
+.find-user-container h1 {
+    font-size: 24px; /* Adjust the title font size */
+}
+
+.find-user-container input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.find-user-button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 18px;
+    cursor: pointer;
+    margin: 10px 0;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.user-info {
+    margin-top: 20px;
+}
+
+/* User Card Styles */
+user-card {
+    background-color: white;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 20px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.user-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.user-card .username {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.user-card .twitter-link {
+    text-decoration: none;
+    color: #00BAFA;
+    display: flex;
+   margin-top: 60px;
+    align-items: center;
+    margin-left: -150px;
+}
+
+
+
+
+.user-card .twitter-link:hover {
+    color: #0077B5;
+}
+
+.user-details {
+    font-size: 18px;
+    text-align: left;
+}
+
+.user-detail {
+    margin: 8px 0;
+}
+
+.user-detail span {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.private-key-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.private-key-input {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 250px;
+}
+
+.toggle-visibility-btn {
+    position: absolute;
+    right: 100px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.set-private-key-btn {
+    padding: 10px;
+    margin-left: 10px;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+
+/* Font Awesome Icons */
+.fa {
+    font-size: 18px;
+}
+
+/* Popup styles */
+.popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 200;
+}
+
+.popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.wallet-button {
+    background-color: white; /* White background */
+    color: #007BFF; /* Blue text */
+    border: 2px solid #007BFF; /* Blue border */
+    padding: 8px 16px;
+    width: 80px;  /* Explicit width */
+    height: 40px; 
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 20px;
+    margin-left: auto; /* Push the button to the right */
+    transition: all 0.3s ease; /* Transition for smooth animation */
+}
+
+/* Hover state */
+.wallet-button:hover {
+    background-color: black; /* Blue background */
+    color: white; /* White text */
+    border: 2px solid white; /* White border */
+}
+
+/* Active/Click state */
+.wallet-button:active {
+    background-color: #0056b3; /* Darker blue background */
+    color: white; /* White text */
+    border: 2px solid white; /* White border */
+}
